@@ -6,17 +6,8 @@ let totalPages = 1;
 let chaosMode = false;
 
 async function loadGalleryData() {
-    // 기본: 현재 경로 기준으로 gallery.json 찾기
-    const base = (() => {
-        // 예: /my-gallery/ 이하에 있다면 그걸 prefix로 쓰고, 아니면 빈 문자열
-        const pathParts = window.location.pathname.split('/');
-        if (pathParts.length > 1 && pathParts[1]) {
-            return `/${pathParts[1]}/`;
-        }
-        return '/';
-    })();
-
-    const url = new URL('gallery.json', base).toString();
+    // gallery.json을 현재 페이지 기준으로 상대 참조
+    const url = new URL('gallery.json', window.location.href).toString();
     const res = await fetch(url, { cache: 'no-cache' });
     if (!res.ok) {
         console.error('gallery.json 불러오기 실패:', res.status, '요청 URL:', url);
@@ -24,6 +15,7 @@ async function loadGalleryData() {
     }
     return await res.json();
 }
+
 
 // 초기화
 async function init() {
