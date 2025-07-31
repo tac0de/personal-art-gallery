@@ -571,7 +571,8 @@ body {
     align-items: center;
     cursor: pointer;
     padding: 20px;
-    overflow: auto; /* 안전하게 스크롤 생기도록 */
+    overflow: auto;
+    /* 안전하게 스크롤 생기도록 */
 }
 
 .image-viewer.active {
@@ -580,7 +581,8 @@ body {
 
 .viewer-content {
     position: relative;
-    max-width: 60vw;
+    max-width: 30vw;
+    max-height: 30vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -695,5 +697,10 @@ body {
 
     .artwork-card:nth-child(11n) {
         grid-row: span 1;
+    }
+
+    .viewer-content {
+        max-width: 90vw;
+        max-height: 90vw;
     }
 }
