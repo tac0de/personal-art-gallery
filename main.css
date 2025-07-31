@@ -580,8 +580,7 @@ body {
 
 .viewer-content {
     position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: 60vw;
     display: flex;
     align-items: center;
     justify-content: center;
