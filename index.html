@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chiarø</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <!-- Glitch background -->
+    <div class="glitch-bg"></div>
+    <div class="noise"></div>
+
+    <!-- Header with distorted positioning -->
+    <div class="header-container">
+        <h1 class="title">CHIARØ</h1>
+        <p class="tagline">Not Meant to Comfort</p>
+        
+        <!-- Corrupted visual elements -->
+        <div class="corrupted-element corrupted-1"></div>
+        <div class="corrupted-element corrupted-2"></div>
+        <div class="corrupted-element corrupted-3"></div>
+        
+        <!-- Glitch overlay -->
+        <div class="glitch-overlay"></div>
+        
+        <!-- Corrupted text -->
+        <div class="corrupted-text corrupted-text-1">ERROR_404: COMFORT_NOT_FOUND</div>
+        <div class="corrupted-text corrupted-text-2">SYSTEM_FAILURE: HOPE_DEPLETED</div>
+        <div class="corrupted-text corrupted-text-3">ACCESS_DENIED: SANITY_REMAINING</div>
+    </div>
+
+    <!-- Main content -->
+    <div class="main-container">
+        <!-- Overlapping elements -->
+        <div class="overlap-container">
+            <div class="overlap-shape overlap-shape-1"></div>
+            <div class="overlap-shape overlap-shape-2"></div>
+        </div>
+        
+        <!-- Gallery with broken grid -->
+        <div id="galleryContainer" class="gallery">
+            <!-- Gallery items will be dynamically added here -->
+        </div>
+        
+        <!-- Cryptic pagination -->
+        <div id="pagination" class="pagination">
+            <!-- Pagination will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Cryptic navigation -->
+    <div class="nav-container">
+        <button class="nav-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+        <button class="nav-btn" onclick="randomGlitch()">!</button>
+        <button class="nav-btn" onclick="toggleChaos()">?</button>
+    </div>
+
+    <!-- Image viewer -->
+    <div id="imageViewer" class="image-viewer" onclick="closeImageViewer()">
+        <div class="viewer-content">
+            <img id="viewerImage" class="viewer-image" src="" alt="">
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "personal-art-gallery",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/tac0de/personal-art-gallery#readme",
+  "bugs": {
+    "url": "https://github.com/tac0de/personal-art-gallery/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tac0de/personal-art-gallery.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "convert2webp": "node png2webp.js --dir=./assets --in-place --lossless"
+  },
+  "dependencies": {
+    "sharp": "^0.34.3"
+  }
+}
