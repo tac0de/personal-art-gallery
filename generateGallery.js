@@ -25,7 +25,7 @@ async function walk(dir) {
       list.push(...(await walk(full)));
     } else if (/\.webp$/i.test(entry.name)) {
       const rel = path.relative(ROOT, full).replaceAll(path.sep, '/');
-      list.push('/' + rel);
+      list.push(rel);
     }
   }
   return list;

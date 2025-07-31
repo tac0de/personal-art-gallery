@@ -16,7 +16,6 @@ async function loadGalleryData() {
     return await res.json();
 }
 
-
 // 초기화
 async function init() {
     try {
