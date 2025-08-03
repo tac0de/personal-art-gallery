@@ -9,6 +9,15 @@
  *
  *  # 덮어쓰기 허용, 동시 처리 8개, dry-run (실제 변환 없이 로그만)
  *  node png2webp.js --dir=./assets --in-place --force --concurrency=8 --dry-run
+ *
+ *  # 번호 매기기와 함께 변환 (1.webp, 2.webp, ...)
+ *  node png2webp.js --dir=./assets --out=./webp_out --number
+ *
+ *  # 번호 매기기와 함께 in-place 변환
+ *  node png2webp.js --dir=./assets --in-place --number
+ *
+ *  # 번호 매기기 시작 번호 지정
+ *  node png2webp.js --dir=./assets --out=./webp_out --number --start=10
  */
 
 import fs from 'fs/promises';
@@ -42,6 +51,8 @@ const inPlace = !!argv['in-place'];
 const dryRun = !!argv['dry-run'];
 const force = !!argv.force;
 const concurrency = Math.max(1, parseInt(argv.concurrency ?? '4', 10));
+const numberFiles = !!argv.number;
+const startNumber = parseInt(argv.start ?? '1', 10);
 
 if (!argv.dir && !inPlace) {
   console.error('필수: --dir=SOURCE_DIR 지정 필요');
@@ -69,14 +80,31 @@ async function ensureDir(filePath) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
 }
 
-async function processFile(file) {
+async function processFile(file, index) {
   try {
-    const targetPath = inPlace
-      ? file.replace(/\.png$/i, '.webp')
-      : path.join(
+    let targetPath;
+
+    if (numberFiles) {
+      // 번호 매기기 모드
+      const number = startNumber + index;
+      const fileName = `${number}.webp`;
+
+      if (inPlace) {
+        // in-place 모드에서는 같은 디렉토리에 번호로 저장
+        targetPath = path.join(path.dirname(file), fileName);
+      } else {
+        // 출력 디렉토리에 번호로 저장
+        targetPath = path.join(outDir, fileName);
+      }
+    } else {
+      // 기존 모드 (원본 파일명 유지)
+      targetPath = inPlace
+        ? file.replace(/\.png$/i, '.webp')
+        : path.join(
           outDir,
           path.relative(srcDir, file).replace(/\.png$/i, '.webp')
         );
+    }
 
     if (dryRun) {
       console.log('[dry-run] would convert:', file, '->', targetPath, inPlace ? '(in-place)' : '');
@@ -108,7 +136,13 @@ async function processFile(file) {
     }
 
     await pipeline.toFile(targetPath);
-    console.log('converted:', path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
+
+    if (numberFiles) {
+      const number = startNumber + index;
+      console.log(`converted [${number}]:`, path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
+    } else {
+      console.log('converted:', path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
+    }
 
     if (inPlace) {
       // 변환 성공 시 원본 삭제
@@ -132,13 +166,21 @@ async function main() {
     return;
   }
 
+  // 번호 매기기 모드일 때 파일들을 정렬 (일관된 순서 보장)
+  if (numberFiles) {
+    pngs.sort();
+  }
+
   // 병렬 처리 제한
   for (let i = 0; i < pngs.length; i += concurrency) {
     const batch = pngs.slice(i, i + concurrency);
-    await Promise.all(batch.map(processFile));
+    await Promise.all(batch.map((file, batchIndex) => processFile(file, i + batchIndex)));
   }
 
   console.log('완료. 총 PNG:', pngs.length);
+  if (numberFiles) {
+    console.log(`번호 매기기: ${startNumber}부터 ${startNumber + pngs.length - 1}까지`);
+  }
 }
 
 main().catch((e) => {

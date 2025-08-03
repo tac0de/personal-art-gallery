@@ -6,5 +6,21 @@
   {
     "id": 2,
     "image": "assets/abstract_2.webp"
+  },
+  {
+    "id": 3,
+    "image": "assets/abstract_3.webp"
+  },
+  {
+    "id": 4,
+    "image": "assets/abstract_4.webp"
+  },
+  {
+    "id": 5,
+    "image": "assets/abstract_5.webp"
+  },
+  {
+    "id": 6,
+    "image": "assets/abstract_6.webp"
   }
 ]
