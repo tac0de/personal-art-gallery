@@ -7,7 +7,9 @@
 }
 
 :root {
-    --red: #FF0000;
+    --blood-red: #8B0000;
+    --dark-red: #660000;
+    --scarlet: #DC143C;
     --black: #000000;
     --white: #FFFFFF;
     --green: #00FF00;
@@ -16,6 +18,10 @@
     --purple: #800080;
     --cyan: #00FFFF;
     --gray: #808080;
+    --red: #FF0000;
+    --dark-blood: #4A0000;
+    --shadow-red: #2D0000;
+    --crimson-dark: #8B0000;
 }
 
 body {
@@ -24,87 +30,7 @@ body {
     font-family: 'Share Tech Mono', monospace;
     overflow-x: hidden;
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="8" r="5" fill="red"/></svg>') 8 8, auto;
-}
-
-/* Glitch background */
-.glitch-bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background:
-        repeating-linear-gradient(45deg,
-            transparent,
-            transparent 10px,
-            rgba(255, 0, 0, 0.1) 10px,
-            rgba(255, 0, 0, 0.1) 20px),
-        repeating-linear-gradient(-45deg,
-            transparent,
-            transparent 10px,
-            rgba(0, 255, 255, 0.05) 10px,
-            rgba(0, 255, 255, 0.05) 20px);
-    z-index: -2;
-    animation: bg-glitch 20s infinite linear;
-}
-
-@keyframes bg-glitch {
-    0% {
-        transform: translate(0);
-    }
-
-    10% {
-        transform: translate(-5px, 5px);
-    }
-
-    20% {
-        transform: translate(5px, -5px);
-    }
-
-    30% {
-        transform: translate(-3px, 3px);
-    }
-
-    40% {
-        transform: translate(3px, -3px);
-    }
-
-    50% {
-        transform: translate(0);
-    }
-
-    60% {
-        transform: translate(2px, -2px);
-    }
-
-    70% {
-        transform: translate(-2px, 2px);
-    }
-
-    80% {
-        transform: translate(1px, -1px);
-    }
-
-    90% {
-        transform: translate(-1px, 1px);
-    }
-
-    100% {
-        transform: translate(0);
-    }
-}
-
-/* Noise overlay */
-.noise {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    opacity: 0.2;
-    z-index: -1;
-    pointer-events: none;
+    position: relative;
 }
 
 /* Distorted header */
@@ -120,59 +46,105 @@ body {
     left: -5%;
     font-family: 'Creepster', cursive;
     font-size: clamp(4rem, 15vw, 12rem);
-    color: var(--red);
+    color: var(--blood-red);
     text-shadow:
-        3px 3px 0 var(--blue),
-        6px 6px 0 var(--yellow);
+        3px 3px 0 var(--dark-red),
+        6px 6px 0 var(--scarlet),
+        9px 9px 0 var(--black);
     transform: rotate(-5deg);
     z-index: 10;
-    animation: title-glitch 8s infinite;
+    animation: aggressive-title-glitch 4s infinite;
     white-space: nowrap;
 }
 
-@keyframes title-glitch {
+@keyframes aggressive-title-glitch {
 
     0%,
     100% {
         text-shadow:
-            3px 3px 0 var(--blue),
-            6px 6px 0 var(--yellow);
+            3px 3px 0 var(--dark-red),
+            6px 6px 0 var(--scarlet),
+            9px 9px 0 var(--black);
         transform: rotate(-5deg) translate(0);
+    }
+
+    10% {
+        text-shadow:
+            -3px -3px 0 var(--green),
+            -6px -6px 0 var(--purple),
+            -9px -9px 0 var(--cyan);
+        transform: rotate(-5deg) translate(-10px, 10px) skew(-5deg);
     }
 
     20% {
         text-shadow:
-            -3px -3px 0 var(--green),
-            -6px -6px 0 var(--purple);
-        transform: rotate(-5deg) translate(-5px, 5px);
+            3px -3px 0 var(--cyan),
+            6px -6px 0 var(--blood-red),
+            9px -9px 0 var(--yellow);
+        transform: rotate(-5deg) translate(10px, -10px) skew(5deg);
+    }
+
+    30% {
+        text-shadow:
+            -3px 3px 0 var(--yellow),
+            -6px 6px 0 var(--blue),
+            -9px 9px 0 var(--green);
+        transform: rotate(-5deg) translate(-8px, -8px) scale(1.1);
     }
 
     40% {
         text-shadow:
-            3px -3px 0 var(--cyan),
-            6px -6px 0 var(--red);
-        transform: rotate(-5deg) translate(5px, -5px);
+            3px 3px 0 var(--purple),
+            6px 6px 0 var(--green),
+            9px 9px 0 var(--red);
+        transform: rotate(-5deg) translate(8px, 8px) scale(0.9);
+    }
+
+    50% {
+        text-shadow:
+            -3px -3px 0 var(--red),
+            -6px -6px 0 var(--cyan),
+            -9px -9px 0 var(--purple);
+        transform: rotate(-5deg) translate(-5px, 5px) rotate(2deg);
     }
 
     60% {
         text-shadow:
-            -3px 3px 0 var(--yellow),
-            -6px 6px 0 var(--blue);
-        transform: rotate(-5deg) translate(-3px, -3px);
+            3px -3px 0 var(--green),
+            6px -6px 0 var(--yellow),
+            9px -9px 0 var(--blue);
+        transform: rotate(-5deg) translate(5px, -5px) rotate(-2deg);
+    }
+
+    70% {
+        text-shadow:
+            -3px 3px 0 var(--blue),
+            -6px 6px 0 var(--red),
+            -9px 9px 0 var(--green);
+        transform: rotate(-5deg) translate(-3px, -3px) skew(-3deg);
     }
 
     80% {
         text-shadow:
-            3px 3px 0 var(--purple),
-            6px 6px 0 var(--green);
-        transform: rotate(-5deg) translate(3px, 3px);
+            3px 3px 0 var(--yellow),
+            6px 6px 0 var(--purple),
+            9px 9px 0 var(--cyan);
+        transform: rotate(-5deg) translate(3px, 3px) skew(3deg);
+    }
+
+    90% {
+        text-shadow:
+            -3px -3px 0 var(--cyan),
+            -6px -6px 0 var(--green),
+            -9px -9px 0 var(--red);
+        transform: rotate(-5deg) translate(-2px, 2px) scale(1.05);
     }
 }
 
 .tagline {
     position: absolute;
     top: 45%;
-    right: -10%;
+    right: 5%;
     font-family: 'UnifrakturMaguntia', cursive;
     font-size: clamp(1.5rem, 5vw, 4rem);
     color: var(--white);
@@ -181,118 +153,63 @@ body {
     transform: rotate(180deg);
     opacity: 0.8;
     z-index: 5;
-    animation: tagline-flicker 5s infinite;
+    animation: aggressive-tagline-flicker 3s infinite;
+    text-shadow: 2px 2px 4px rgba(139, 0, 0, 0.8);
 }
 
-@keyframes tagline-flicker {
+@keyframes aggressive-tagline-flicker {
 
     0%,
     100% {
         opacity: 0.8;
     }
 
-    25% {
-        opacity: 0.3;
+    10% {
+        opacity: 0.1;
     }
 
-    50% {
+    20% {
         opacity: 1;
     }
 
-    75% {
-        opacity: 0.5;
-    }
-}
-
-/* Corrupted visual elements */
-.corrupted-element {
-    position: absolute;
-    background: var(--red);
-    mix-blend-mode: screen;
-    animation: corrupt 15s infinite;
-}
-
-.corrupted-1 {
-    top: 20%;
-    left: 30%;
-    width: 150px;
-    height: 150px;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    animation-delay: 0s;
-}
-
-.corrupted-2 {
-    bottom: 25%;
-    right: 20%;
-    width: 200px;
-    height: 80px;
-    clip-path: polygon(0% 0%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
-    animation-delay: 3s;
-}
-
-.corrupted-3 {
-    top: 60%;
-    left: 10%;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    animation-delay: 7s;
-}
-
-@keyframes corrupt {
-
-    0%,
-    100% {
-        transform: rotate(0deg) scale(1);
-        opacity: 0.7;
-    }
-
-    25% {
-        transform: rotate(90deg) scale(1.2);
+    30% {
         opacity: 0.3;
     }
 
-    50% {
-        transform: rotate(180deg) scale(0.8);
+    40% {
         opacity: 0.9;
     }
 
-    75% {
-        transform: rotate(270deg) scale(1.1);
-        opacity: 0.5;
+    50% {
+        opacity: 0.2;
+    }
+
+    60% {
+        opacity: 1;
+    }
+
+    70% {
+        opacity: 0.4;
+    }
+
+    80% {
+        opacity: 0.8;
+    }
+
+    90% {
+        opacity: 0.1;
     }
 }
 
-/* Glitch overlay */
-.glitch-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(transparent 50%,
-            rgba(255, 0, 0, 0.1) 50%);
-    background-size: 100% 4px;
-    animation: glitch-move 2s linear infinite;
-    z-index: 1;
-    pointer-events: none;
-}
 
-@keyframes glitch-move {
-    0% {
-        background-position: 0 0;
-    }
 
-    100% {
-        background-position: 0 10px;
-    }
-}
+
 
 /* Main content - broken grid */
 .main-container {
     position: relative;
     padding: 5rem 2rem;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 20, 20, 0.8) 10%, rgba(0, 0, 0, 0.8) 90%, rgba(0, 0, 0, 0) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(20, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.8) 90%, rgba(0, 0, 0, 0) 100%);
 }
 
 .gallery {
@@ -303,87 +220,41 @@ body {
     position: relative;
 }
 
-/* Overlapping elements */
-.overlap-container {
-    position: absolute;
-    top: -50px;
-    left: 50px;
-    width: 300px;
-    height: 300px;
-    z-index: 5;
-    pointer-events: none;
-}
-
-.overlap-shape {
-    position: absolute;
-    background: var(--cyan);
-    mix-blend-mode: difference;
-    opacity: 0.6;
-}
-
-.overlap-shape-1 {
-    top: 0;
-    left: 0;
-    width: 150px;
-    height: 150px;
-    clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
-    animation: float 8s infinite ease-in-out;
-}
-
-.overlap-shape-2 {
-    bottom: 0;
-    right: 0;
-    width: 100px;
-    height: 100px;
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    animation: float 6s infinite ease-in-out reverse;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translate(0, 0);
-    }
-
-    50% {
-        transform: translate(20px, -20px);
-    }
-}
-
-/* Artwork cards - broken layout */
+/* Enhanced artwork cards - broken layout */
 .artwork-card {
     position: relative;
     overflow: hidden;
-    border: 2px solid;
+    border: 3px solid;
     cursor: pointer;
     transition: all 0.3s;
 }
 
 /* Different styles for each card */
 .artwork-card:nth-child(odd) {
+    border-color: var(--blood-red);
+    transform: rotate(-3deg);
+}
+
+.artwork-card:nth-child(even) {
+    border-color: var(--dark-red);
+    transform: rotate(2deg);
+}
+
+.artwork-card:nth-child(3n) {
+    border-color: var(--scarlet);
+    transform: rotate(1deg) scale(1.05);
+}
+
+.artwork-card:nth-child(4n) {
     border-color: var(--red);
     transform: rotate(-2deg);
 }
 
-.artwork-card:nth-child(even) {
-    border-color: var(--blue);
-    transform: rotate(1deg);
-}
-
-.artwork-card:nth-child(3n) {
-    border-color: var(--green);
-    transform: rotate(0.5deg) scale(1.05);
-}
-
-.artwork-card:nth-child(4n) {
-    border-color: var(--yellow);
-    transform: rotate(-0.7deg);
-}
-
 .artwork-card:hover {
-    transform: scale(1.05) rotate(0);
+    transform: scale(1.1) rotate(0);
     z-index: 10;
+    border-color: var(--yellow);
+    box-shadow: 0 0 30px var(--blood-red);
 }
 
 /* Different sizes for broken grid */
@@ -404,23 +275,38 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: contrast(1.5) saturate(0) hue-rotate(90deg);
+    filter: contrast(2) saturate(0) hue-rotate(90deg) brightness(0.8);
     transition: all 0.5s;
 }
 
 .artwork-card:nth-child(odd) .artwork-image {
-    filter: contrast(1.5) saturate(0) hue-rotate(180deg);
+    filter: contrast(2) saturate(0) hue-rotate(180deg) brightness(0.7);
 }
 
 .artwork-card:nth-child(3n) .artwork-image {
-    filter: contrast(1.5) saturate(0) hue-rotate(270deg);
+    filter: contrast(2) saturate(0) hue-rotate(270deg) brightness(0.6);
 }
 
 .artwork-card:hover .artwork-image {
-    filter: contrast(2) saturate(1.5) hue-rotate(0deg);
+    filter: contrast(3) saturate(2) hue-rotate(0deg) brightness(1.2);
+    animation: image-jumpscare 0.5s ease-out;
 }
 
-/* Glitch effect on cards */
+@keyframes image-jumpscare {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Enhanced glitch effect on cards */
 .artwork-card::before {
     content: '';
     position: absolute;
@@ -430,7 +316,7 @@ body {
     height: 100%;
     background: linear-gradient(90deg,
             transparent 0%,
-            rgba(255, 255, 255, 0.1) 50%,
+            rgba(139, 0, 0, 0.3) 50%,
             transparent 100%);
     background-size: 200% 100%;
     opacity: 0;
@@ -439,20 +325,24 @@ body {
 
 .artwork-card:hover::before {
     opacity: 1;
-    animation: glitch-slide 0.5s linear infinite;
+    animation: aggressive-glitch-slide 0.3s linear infinite;
 }
 
-@keyframes glitch-slide {
+@keyframes aggressive-glitch-slide {
     0% {
         background-position: -100% 0;
     }
 
-    100% {
+    50% {
         background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
     }
 }
 
-/* Cryptic navigation */
+/* Enhanced cryptic navigation */
 .nav-container {
     position: fixed;
     bottom: 20px;
@@ -467,7 +357,7 @@ body {
     width: 50px;
     height: 50px;
     background: var(--black);
-    border: 2px solid var(--white);
+    border: 3px solid var(--blood-red);
     color: var(--white);
     font-family: 'Rubik Mono One', sans-serif;
     font-size: 1.2rem;
@@ -487,7 +377,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: var(--red);
+    background: var(--blood-red);
     transform: translateX(-100%);
     transition: transform 0.3s;
 }
@@ -498,10 +388,11 @@ body {
 
 .nav-btn:hover {
     color: var(--black);
-    transform: rotate(10deg) scale(1.1);
+    transform: rotate(15deg) scale(1.2);
+    box-shadow: 0 0 20px var(--blood-red);
 }
 
-/* Pagination - unreadable buttons */
+/* Enhanced pagination - unreadable buttons */
 .pagination {
     display: flex;
     justify-content: center;
@@ -513,7 +404,7 @@ body {
 .page-btn {
     padding: 10px 20px;
     background: transparent;
-    border: 2px solid;
+    border: 3px solid;
     color: var(--white);
     font-family: 'ZCOOL QingKe HuangYou', cursive;
     font-size: 1.2rem;
@@ -524,18 +415,19 @@ body {
 }
 
 .page-btn:nth-child(odd) {
-    border-color: var(--red);
+    border-color: var(--blood-red);
     transform: rotate(-3deg);
 }
 
 .page-btn:nth-child(even) {
-    border-color: var(--blue);
+    border-color: var(--dark-red);
     transform: rotate(2deg);
 }
 
 .page-btn:hover {
-    transform: rotate(0) scale(1.1);
+    transform: rotate(0) scale(1.2);
     color: var(--black);
+    box-shadow: 0 0 15px var(--blood-red);
 }
 
 .page-btn::after {
@@ -556,23 +448,23 @@ body {
 }
 
 .page-btn.active {
-    background: var(--purple);
-    border-color: var(--purple);
-    transform: rotate(0) scale(1.2);
+    background: var(--scarlet);
+    border-color: var(--scarlet);
+    transform: rotate(0) scale(1.3);
+    box-shadow: 0 0 25px var(--blood-red);
 }
 
 .image-viewer {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 200;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     padding: 20px;
     overflow: auto;
-    /* 안전하게 스크롤 생기도록 */
 }
 
 .image-viewer.active {
@@ -595,79 +487,77 @@ body {
     width: auto;
     height: auto;
     object-fit: contain;
-    border: 5px solid var(--white);
-    filter: contrast(1.5) saturate(1.5);
-    animation: viewer-glitch 5s infinite;
+    border: 5px solid var(--blood-red);
+    filter: contrast(2) saturate(1.5);
+    animation: aggressive-viewer-glitch 3s infinite;
 }
 
-@keyframes viewer-glitch {
+@keyframes aggressive-viewer-glitch {
 
     0%,
     100% {
-        filter: contrast(1.5) saturate(1.5) hue-rotate(0deg);
-        border-color: var(--white);
+        filter: contrast(2) saturate(1.5) hue-rotate(0deg);
+        border-color: var(--blood-red);
     }
 
-    25% {
-        filter: contrast(2) saturate(0) hue-rotate(90deg);
-        border-color: var(--red);
+    10% {
+        filter: contrast(3) saturate(0) hue-rotate(90deg);
+        border-color: var(--dark-red);
+        transform: translate(-5px, 5px);
     }
 
-    50% {
+    20% {
         filter: contrast(1) saturate(2) hue-rotate(180deg);
-        border-color: var(--blue);
+        border-color: var(--scarlet);
+        transform: translate(5px, -5px);
     }
 
-    75% {
+    30% {
         filter: contrast(2.5) saturate(0.5) hue-rotate(270deg);
-        border-color: var(--green);
+        border-color: var(--red);
+        transform: translate(-3px, -3px);
     }
-}
 
-/* Corrupted text overlay */
-.corrupted-text {
-    position: absolute;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 1rem;
-    color: var(--white);
-    opacity: 0.7;
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 20;
-}
-
-.corrupted-text-1 {
-    top: 30%;
-    left: 5%;
-    transform: rotate(-15deg);
-    animation: text-flicker 3s infinite;
-}
-
-.corrupted-text-2 {
-    bottom: 20%;
-    right: 10%;
-    transform: rotate(10deg);
-    animation: text-flicker 4s infinite 1s;
-}
-
-.corrupted-text-3 {
-    top: 60%;
-    left: 70%;
-    transform: rotate(5deg);
-    animation: text-flicker 5s infinite 2s;
-}
-
-@keyframes text-flicker {
-
-    0%,
-    100% {
-        opacity: 0.7;
+    40% {
+        filter: contrast(1.5) saturate(1.8) hue-rotate(45deg);
+        border-color: var(--yellow);
+        transform: translate(3px, 3px);
     }
 
     50% {
-        opacity: 0.2;
+        filter: contrast(3.5) saturate(0.2) hue-rotate(135deg);
+        border-color: var(--green);
+        transform: translate(-2px, 2px);
+    }
+
+    60% {
+        filter: contrast(0.8) saturate(2.5) hue-rotate(225deg);
+        border-color: var(--blue);
+        transform: translate(2px, -2px);
+    }
+
+    70% {
+        filter: contrast(2.8) saturate(0.8) hue-rotate(315deg);
+        border-color: var(--purple);
+        transform: translate(-1px, -1px);
+    }
+
+    80% {
+        filter: contrast(1.2) saturate(2.2) hue-rotate(360deg);
+        border-color: var(--cyan);
+        transform: translate(1px, 1px);
+    }
+
+    90% {
+        filter: contrast(3.2) saturate(0.3) hue-rotate(180deg);
+        border-color: var(--blood-red);
+        transform: translate(0, 0);
     }
 }
+
+
+
+
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -702,5 +592,282 @@ body {
     .viewer-content {
         max-width: 90vw;
         max-height: 90vw;
+    }
+}
+
+/* Gallery navigation buttons */
+.gallery-nav {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 250;
+    pointer-events: none;
+}
+
+.gallery-nav.active {
+    display: flex;
+}
+
+.gallery-nav-btn {
+    width: 60px;
+    height: 60px;
+    background: var(--black);
+    border: 3px solid var(--blood-red);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+}
+
+.gallery-nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--blood-red);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+    border-radius: 50%;
+}
+
+.gallery-nav-btn:hover::before {
+    transform: translateX(0);
+}
+
+.gallery-nav-btn:hover {
+    color: var(--black);
+    transform: scale(1.1);
+    box-shadow: 0 0 30px var(--blood-red);
+    border-color: var(--scarlet);
+}
+
+.gallery-nav-btn:active {
+    transform: scale(0.95);
+}
+
+.gallery-nav-left {
+    transform: rotate(-5deg);
+}
+
+.gallery-nav-right {
+    transform: rotate(5deg);
+}
+
+.gallery-nav-btn:hover.gallery-nav-left {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+.gallery-nav-btn:hover.gallery-nav-right {
+    transform: rotate(5deg) scale(1.1);
+}
+
+/* Responsive adjustments for gallery nav */
+@media (max-width: 768px) {
+    .gallery-nav {
+        padding: 0 10px;
+    }
+
+    .gallery-nav-btn {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+}
+
+/* High-Quality Glitch Effects */
+@keyframes glitch-sweep {
+    0% {
+        background-position: -100% 0;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        background-position: 100% 0;
+        opacity: 0;
+    }
+}
+
+/* Image glitch effect */
+.image-glitch {
+    animation: image-glitch-effect 0.5s ease-out;
+}
+
+@keyframes image-glitch-effect {
+    0% {
+        filter: contrast(1) saturate(1) hue-rotate(0deg);
+        transform: translate(0, 0) scale(1);
+    }
+
+    10% {
+        filter: contrast(2) saturate(0) hue-rotate(90deg);
+        transform: translate(-5px, 2px) scale(1.02);
+    }
+
+    20% {
+        filter: contrast(1.5) saturate(1.5) hue-rotate(180deg);
+        transform: translate(3px, -3px) scale(0.98);
+    }
+
+    30% {
+        filter: contrast(3) saturate(0.5) hue-rotate(270deg);
+        transform: translate(-2px, 1px) scale(1.01);
+    }
+
+    40% {
+        filter: contrast(0.8) saturate(2) hue-rotate(360deg);
+        transform: translate(4px, -2px) scale(0.99);
+    }
+
+    50% {
+        filter: contrast(2.5) saturate(0.8) hue-rotate(45deg);
+        transform: translate(-1px, 3px) scale(1.03);
+    }
+
+    60% {
+        filter: contrast(1.2) saturate(1.8) hue-rotate(135deg);
+        transform: translate(2px, -1px) scale(0.97);
+    }
+
+    70% {
+        filter: contrast(2.8) saturate(0.3) hue-rotate(225deg);
+        transform: translate(-3px, 2px) scale(1.02);
+    }
+
+    80% {
+        filter: contrast(0.9) saturate(2.2) hue-rotate(315deg);
+        transform: translate(1px, -3px) scale(0.98);
+    }
+
+    90% {
+        filter: contrast(2.2) saturate(0.6) hue-rotate(360deg);
+        transform: translate(-2px, 1px) scale(1.01);
+    }
+
+    100% {
+        filter: contrast(1) saturate(1) hue-rotate(0deg);
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+/* Chaos mode background effect */
+.chaos-mode {
+    animation: chaos-background 4s ease-out;
+}
+
+@keyframes chaos-background {
+    0% {
+        background: var(--black);
+    }
+
+    10% {
+        background:
+            linear-gradient(45deg,
+                var(--black) 0%,
+                var(--dark-blood) 40%,
+                var(--shadow-red) 60%,
+                var(--black) 100%);
+    }
+
+    30% {
+        background:
+            linear-gradient(-45deg,
+                var(--black) 0%,
+                var(--scarlet) 30%,
+                var(--dark-blood) 70%,
+                var(--black) 100%);
+    }
+
+    50% {
+        background:
+            linear-gradient(90deg,
+                var(--black) 0%,
+                rgba(75, 0, 0, 0.9) 50%,
+                var(--black) 100%);
+    }
+
+    70% {
+        background:
+            linear-gradient(180deg,
+                var(--black) 0%,
+                var(--crimson-dark) 50%,
+                var(--black) 100%);
+    }
+
+    100% {
+        background: var(--black);
+    }
+}
+
+/* Enhanced glitch overlay for artwork cards */
+.glitch-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.9) 49%, rgba(255, 255, 255, 0.9) 51%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.9) 49%, rgba(255, 255, 255, 0.9) 51%, transparent 52%);
+    background-size: 15px 15px, 15px 15px;
+    animation: glitch-sweep 0.3s linear;
+    pointer-events: none;
+    z-index: 10;
+    mix-blend-mode: screen;
+}
+
+/* Enhanced artwork card glitch effects */
+.artwork-card.glitching {
+    animation: card-glitch 0.4s ease-out;
+}
+
+@keyframes card-glitch {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: contrast(1) saturate(1) hue-rotate(0deg);
+    }
+
+    25% {
+        transform: scale(1.1) rotate(2deg);
+        filter: contrast(2) saturate(0) hue-rotate(90deg);
+    }
+
+    50% {
+        transform: scale(0.9) rotate(-1deg);
+        filter: contrast(1.5) saturate(1.5) hue-rotate(180deg);
+    }
+
+    75% {
+        transform: scale(1.05) rotate(1deg);
+        filter: contrast(2.5) saturate(0.5) hue-rotate(270deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+        filter: contrast(1) saturate(1) hue-rotate(0deg);
     }
 }

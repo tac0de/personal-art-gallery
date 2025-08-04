@@ -1,12 +1,11 @@
-
 let galleryData = [];
 const itemsPerPage = 8;
 let currentPage = 1;
 let totalPages = 1;
 let chaosMode = false;
+let currentImageIndex = 0;
 
 async function loadGalleryData() {
-    // gallery.json을 현재 페이지 기준으로 상대 참조
     const url = new URL('gallery.json', window.location.href).toString();
     const res = await fetch(url, { cache: 'no-cache' });
     if (!res.ok) {
@@ -16,21 +15,25 @@ async function loadGalleryData() {
     return await res.json();
 }
 
-// 초기화
 async function init() {
+    console.log('Initializing gallery...');
     try {
         galleryData = await loadGalleryData();
+        console.log('Gallery data loaded:', galleryData.length, 'items');
     } catch (e) {
         console.error('갤러리 로딩 중 예외:', e);
         galleryData = [];
     }
-
     totalPages = Math.max(1, Math.ceil(galleryData.length / itemsPerPage));
+    console.log('Total pages:', totalPages);
+
     renderGallery();
     renderPagination();
-}
+    initGlitchEffects();
+    initChaosMode();
 
-console.log(galleryData);
+    console.log('Initialization complete');
+}
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -56,7 +59,12 @@ function renderGallery() {
         )
         .join('');
 
-    if (chaosMode) toggleChaos(); // 상태 유지
+    setTimeout(() => {
+        applyRandomSizes();
+        if (chaosMode) {
+            applyChaosStyles();
+        }
+    }, 100);
 }
 
 function renderPagination() {
@@ -67,12 +75,10 @@ function renderPagination() {
         paginationContainer.style.display = 'none';
         return;
     }
-
     paginationContainer.style.display = 'flex';
 
     const symbols = ['◉', '◈', '◇', '◎', '◐', '◑', '◒', '◓', '◔', '◕'];
     let paginationHTML = '';
-
     for (let i = 1; i <= totalPages; i++) {
         const symbol = symbols[i % symbols.length];
         paginationHTML += `
@@ -80,7 +86,6 @@ function renderPagination() {
           ${symbol}
         </button>`;
     }
-
     paginationContainer.innerHTML = paginationHTML;
 }
 
@@ -89,98 +94,169 @@ function changePage(page) {
     currentPage = page;
     renderGallery();
     renderPagination();
-    const gallery = document.getElementById('galleryContainer');
-    gallery?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('galleryContainer')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (Math.random() > 0.7) triggerRandomGlitch();
+}
+
+function navigateGallery(direction) {
+    const imageViewer = document.getElementById('imageViewer');
+    if (!imageViewer.classList.contains('active')) return;
+
+    let nextIndex = direction === 'prev'
+        ? (currentImageIndex > 0 ? currentImageIndex - 1 : galleryData.length - 1)
+        : (currentImageIndex < galleryData.length - 1 ? currentImageIndex + 1 : 0);
+
+    const nextImage = galleryData[nextIndex];
+    if (nextImage) {
+        document.getElementById('viewerImage').src = nextImage.image;
+        currentImageIndex = nextIndex;
+        if (Math.random() > 0.6) triggerImageGlitch();
+    }
 }
 
 function viewImage(imageSrc) {
     document.getElementById('viewerImage').src = imageSrc;
     document.getElementById('imageViewer').classList.add('active');
+    document.querySelector('.gallery-nav').classList.add('active');
+    currentImageIndex = galleryData.findIndex(item => item.image === imageSrc);
 }
 
 function closeImageViewer() {
     document.getElementById('imageViewer').classList.remove('active');
+    document.querySelector('.gallery-nav').classList.remove('active');
 }
 
-function randomGlitch() {
-    const elements = document.querySelectorAll('.artwork-card, .corrupted-element, .overlap-shape');
-    if (elements.length === 0) return;
-    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+function initGlitchEffects() {
+    setInterval(() => {
+        if (Math.random() > 0.95) triggerRandomGlitch();
+    }, 8000);
 
-    randomElement.style.animation = 'none';
+    setInterval(() => {
+        const imageViewer = document.getElementById('imageViewer');
+        if (imageViewer.classList.contains('active') && Math.random() > 0.9) {
+            triggerImageGlitch();
+        }
+    }, 5000);
+}
+
+function initChaosMode() {
+    setInterval(() => {
+        if (Math.random() > 0.85 && !chaosMode) {
+            toggleChaos();
+            setTimeout(() => {
+                if (chaosMode) toggleChaos();
+            }, 4000);
+        }
+    }, 6000);
+
+    setInterval(() => {
+        if (Math.random() > 0.7) randomizeGalleryItems();
+    }, 3000);
+}
+
+function createGlitchOverlay() {
+    const overlay = document.createElement('div');
+    overlay.className = 'glitch-overlay';
+    overlay.style.cssText = `
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: linear-gradient(45deg, transparent 48%, rgba(255,255,255,0.8) 49%, rgba(255,255,255,0.8) 51%, transparent 52%);
+        background-size: 10px 10px;
+        animation: glitch-sweep 0.3s linear;
+        pointer-events: none;
+        z-index: 10;
+    `;
+    return overlay;
+}
+
+function triggerRandomGlitch() {
+    const elements = document.querySelectorAll('.artwork-card');
+    if (!elements.length) return;
+    const el = elements[Math.floor(Math.random() * elements.length)];
+    const overlay = createGlitchOverlay();
+    el.appendChild(overlay);
     setTimeout(() => {
-        randomElement.style.animation = '';
-    }, 10);
+        if (el.contains(overlay)) el.removeChild(overlay);
+    }, 300);
+}
 
-    const glitchOverlay = document.createElement('div');
-    glitchOverlay.style.position = 'fixed';
-    glitchOverlay.style.top = '0';
-    glitchOverlay.style.left = '0';
-    glitchOverlay.style.width = '100%';
-    glitchOverlay.style.height = '100%';
-    glitchOverlay.style.background = `linear-gradient(45deg, transparent 48%, rgba(255,0,0,0.3) 49%, rgba(0,255,255,0.3) 50%, transparent 51%)`;
-    glitchOverlay.style.backgroundSize = '20px 20px';
-    glitchOverlay.style.zIndex = '1000';
-    glitchOverlay.style.pointerEvents = 'none';
-    glitchOverlay.style.animation = 'glitch-move 0.5s linear';
+function triggerImageGlitch() {
+    const img = document.getElementById('viewerImage');
+    if (!img) return;
+    img.classList.add('image-glitch');
+    setTimeout(() => img.classList.remove('image-glitch'), 500);
+}
 
-    document.body.appendChild(glitchOverlay);
-    setTimeout(() => {
-        document.body.removeChild(glitchOverlay);
-    }, 500);
+function applyRandomSizes() {
+    document.querySelectorAll('.artwork-card').forEach(el => {
+        const scale = 0.7 + Math.random() * 0.8;
+        const rotate = Math.random() * 15 - 7.5;
+        el.style.transform = `scale(${scale}) rotate(${rotate}deg)`;
+        el.style.transition = 'all 0.5s ease-out';
+    });
+}
+
+function randomizeGalleryItems() {
+    document.querySelectorAll('.artwork-card').forEach(el => {
+        const tx = Math.random() * 100 - 50;
+        const ty = Math.random() * 100 - 50;
+        const scale = 0.8 + Math.random() * 0.6;
+        const rotate = Math.random() * 20 - 10;
+        const z = Math.floor(Math.random() * 20);
+        el.style.transform = `translate(${tx}px, ${ty}px) scale(${scale}) rotate(${rotate}deg)`;
+        el.style.zIndex = z;
+        el.style.transition = 'all 0.8s ease-out';
+    });
+}
+
+function applyChaosStyles() {
+    document.querySelectorAll('.artwork-card').forEach(el => {
+        const rRot = Math.random() * 60 - 30;
+        const rScale = 0.4 + Math.random() * 1.2;
+        const rTX = Math.random() * 120 - 60;
+        const rTY = Math.random() * 120 - 60;
+        const hue = Math.random() * 360;
+        const bright = 0.1 + Math.random() * 0.4;
+        const sat = 1.0 + Math.random() * 2.0;
+        const cont = 2.0 + Math.random() * 2.0;
+        el.style.transform = `rotate(${rRot}deg) scale(${rScale}) translate(${rTX}px, ${rTY}px) skew(${Math.random() * 20 - 10}deg)`;
+        el.style.filter = `hue-rotate(${hue}deg) brightness(${bright}) saturate(${sat}) contrast(${cont})`;
+        el.style.transition = 'all 0.8s ease-out';
+        el.style.boxShadow = `0 0 20px rgba(139,0,0,0.8)`;
+        el.style.zIndex = Math.floor(Math.random() * 50);
+    });
 }
 
 function toggleChaos() {
     chaosMode = !chaosMode;
-    const elements = document.querySelectorAll('.artwork-card');
-    elements.forEach((el) => {
-        if (chaosMode) {
-            const randomRotate = Math.random() * 20 - 10;
-            const randomScale = 0.8 + Math.random() * 0.4;
-            const randomTranslateX = Math.random() * 40 - 20;
-            const randomTranslateY = Math.random() * 40 - 20;
-            el.style.transform = `rotate(${randomRotate}deg) scale(${randomScale}) translate(${randomTranslateX}px, ${randomTranslateY}px)`;
-            el.style.zIndex = Math.floor(Math.random() * 10);
-        } else {
+    if (chaosMode) {
+        document.body.classList.add('chaos-mode');
+        applyChaosStyles();
+    } else {
+        document.querySelectorAll('.artwork-card').forEach(el => {
             el.style.transform = '';
-            el.style.zIndex = '';
-        }
-    });
+            el.style.filter = '';
+            el.style.boxShadow = '';
+            el.style.transition = 'all 0.5s ease-in';
+        });
+        document.body.classList.remove('chaos-mode');
+        // Optional: 리셋 후 초기 랜덤 사이즈로 복귀
+        applyRandomSizes();
+    }
 }
 
-document.addEventListener('mousemove', (e) => {
-    if (Math.random() > 0.98) {
-        const x = e.clientX;
-        const y = e.clientY;
-        const glitch = document.createElement('div');
-        glitch.style.position = 'fixed';
-        glitch.style.left = x + 'px';
-        glitch.style.top = y + 'px';
-        glitch.style.width = '10px';
-        glitch.style.height = '10px';
-        glitch.style.background = Math.random() > 0.5 ? 'red' : 'cyan';
-        glitch.style.borderRadius = '50%';
-        glitch.style.pointerEvents = 'none';
-        glitch.style.zIndex = '1000';
-        glitch.style.opacity = '0.7';
-        glitch.style.transform = 'translate(-50%, -50%)';
-
-        document.body.appendChild(glitch);
-
-        setTimeout(() => {
-            glitch.style.transition = 'all 1s';
-            glitch.style.opacity = '0';
-            glitch.style.transform = 'translate(-50%, -50%) scale(5)';
-
-            setTimeout(() => {
-                document.body.removeChild(glitch);
-            }, 1000);
-        }, 10);
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeImageViewer();
+    const imageViewer = document.getElementById('imageViewer');
+    if (imageViewer.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') navigateGallery('prev');
+        if (e.key === 'ArrowRight') navigateGallery('next');
     }
 });
 
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeImageViewer();
+document.addEventListener('mouseover', (e) => {
+    if (e.target.classList.contains('artwork-card') && Math.random() > 0.95) {
+        triggerRandomGlitch();
     }
 });
