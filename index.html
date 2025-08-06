@@ -4,59 +4,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chiarø</title>
-    <link rel="stylesheet" href="main.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1442589383449567"
-        crossorigin="anonymous"></script>
+    <title>ABYSSAL GALLERY</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Space+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div class="glitch-overlay"></div>
 
+    <!-- Broken Header -->
+    <header>
+        <div class="logo glitch-hover">ABYSSAL GALLERY</div>
+        <nav>
+            <ul>
+                <li><a href="#" class="glitch-hover">ERROR</a></li>
+                <li><a href="#" class="glitch-hover">NULL</a></li>
+                <li><a href="#" class="glitch-hover">VOID</a></li>
+                <li><a href="#" class="glitch-hover">ABYSS</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <!-- Header with distorted positioning -->
-    <div class="header-container">
-        <h1 class="title">CHIARØ</h1>
-        <p class="tagline">Not Meant to Comfort</p>
-
-
-
-
-    </div>
-
-    <!-- Main content -->
-    <div class="main-container">
-        <!-- Gallery with broken grid -->
-        <div id="galleryContainer" class="gallery">
-            <!-- Gallery items will be dynamically added here -->
+    <!-- Broken Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="pulse">WHERE NIGHTMARES TAKE FORM</h1>
+            <p>An exploration of abstract horror through digital decay and surreal terror</p>
+            <a href="#" class="cta-button broken-cursor">ENTER THE VOID</a>
         </div>
+    </section>
 
-        <!-- Enhanced cryptic pagination -->
-        <div id="pagination" class="pagination">
-            <!-- Pagination will be dynamically added here -->
+    <section class="chaos-zone">
+        <h2 class="section-title glitch-hover">SYSTEM MALFUNCTION</h2>
+        <div class="jumpscare-trigger">DO NOT CLICK</div>
+        <div id="glass-overlay"></div>
+        <audio id="glass-break-sound" src="glass-break.mp3" preload="auto"></audio>
+    </section>
+
+    <!-- Broken Meme Section -->
+    <section class="meme-section">
+        <h2 class="section-title glitch-hover">CORRUPTED MEMORIES</h2>
+        <div id="meme-grid" class="meme-grid">
+            <!-- Dynamic content will be inserted here -->
         </div>
-    </div>
+    </section>
 
-    <!-- Gallery navigation buttons -->
-    <div class="gallery-nav">
-        <button class="gallery-nav-btn gallery-nav-left" onclick="navigateGallery('prev')">◀</button>
-        <button class="gallery-nav-btn gallery-nav-right" onclick="navigateGallery('next')">▶</button>
-    </div>
-
-    <!-- Enhanced cryptic navigation -->
-    <div class="nav-container">
-        <button class="nav-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
-    </div>
-
-
-
-    <!-- Enhanced image viewer -->
-    <div id="imageViewer" class="image-viewer" onclick="closeImageViewer()">
-        <div class="viewer-content">
-            <img id="viewerImage" class="viewer-image" src="" alt="">
+    <!-- Broken Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-links">
+                <a href="#" class="glitch-hover broken-cursor"><i class="material-icons">error</i></a>
+                <a href="#" class="glitch-hover broken-cursor"><i class="material-icons">warning</i></a>
+                <a href="#" class="glitch-hover broken-cursor"><i class="material-icons">report_problem</i></a>
+            </div>
+            <p class="contact-info">contact@abyssalgallery.com | +1 (555) 123-4567</p>
+            <p class="copyright">© 2023 Abyssal Gallery. All rights reserved. Enter at your own risk.</p>
         </div>
-    </div>
+    </footer>
 
-    <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>

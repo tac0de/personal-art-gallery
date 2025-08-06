@@ -15,7 +15,7 @@
   "type": "module",
   "main": "main.js",
   "scripts": {
-    "convert2webp": "node png2webp.js --dir=./assets --number --in-place --lossless"
+    "convert2webp": "node png2webp.js --dir=./assets --in-place --lossless"
   },
   "dependencies": {
     "sharp": "^0.34.3"

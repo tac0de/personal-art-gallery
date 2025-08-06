@@ -63,13 +63,13 @@ if (inPlace && argv.out) {
   console.warn('주의: --in-place 모드에서는 --out 옵션이 무시됩니다.');
 }
 
-async function collectPNGs(dir, list = []) {
+async function collectImages(dir, list = []) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
   for (const e of entries) {
     const full = path.join(dir, e.name);
     if (e.isDirectory()) {
-      await collectPNGs(full, list);
-    } else if (/\.png$/i.test(e.name)) {
+      await collectImages(full, list);
+    } else if (/\.(png|webp)$/i.test(e.name)) {
       list.push(full);
     }
   }
@@ -82,70 +82,52 @@ async function ensureDir(filePath) {
 
 async function processFile(file, index) {
   try {
+    const ext = path.extname(file).toLowerCase();
+    const baseName = path.basename(file, ext);
     let targetPath;
 
     if (numberFiles) {
-      // 번호 매기기 모드
       const number = startNumber + index;
       const fileName = `${number}.webp`;
-
-      if (inPlace) {
-        // in-place 모드에서는 같은 디렉토리에 번호로 저장
-        targetPath = path.join(path.dirname(file), fileName);
-      } else {
-        // 출력 디렉토리에 번호로 저장
-        targetPath = path.join(outDir, fileName);
-      }
+      targetPath = inPlace ? path.join(path.dirname(file), fileName) : path.join(outDir, fileName);
     } else {
-      // 기존 모드 (원본 파일명 유지)
       targetPath = inPlace
-        ? file.replace(/\.png$/i, '.webp')
-        : path.join(
-          outDir,
-          path.relative(srcDir, file).replace(/\.png$/i, '.webp')
-        );
+        ? file.replace(/\.(png|webp)$/i, '.webp')
+        : path.join(outDir, path.relative(srcDir, file).replace(/\.(png|webp)$/i, '.webp'));
     }
 
     if (dryRun) {
-      console.log('[dry-run] would convert:', file, '->', targetPath, inPlace ? '(in-place)' : '');
-      if (inPlace) {
-        console.log('[dry-run] would remove original PNG:', file);
-      }
+      console.log('[dry-run] would process:', file, '->', targetPath, inPlace ? '(in-place)' : '');
       return;
-    }
-
-    // 존재 검사
-    if (!force) {
-      const exists = await fs
-        .access(targetPath)
-        .then(() => true)
-        .catch(() => false);
-      if (exists) {
-        console.log('skipped (exists):', targetPath);
-        return;
-      }
     }
 
     await ensureDir(targetPath);
 
-    let pipeline = sharp(file);
-    if (lossless) {
-      pipeline = pipeline.webp({ lossless: true, effort: 6 });
-    } else {
-      pipeline = pipeline.webp({ quality, effort: 6 });
-    }
-
-    await pipeline.toFile(targetPath);
-
-    if (numberFiles) {
-      const number = startNumber + index;
-      console.log(`converted [${number}]:`, path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
-    } else {
+    if (ext === '.png') {
+      // Convert PNG to WebP
+      let pipeline = sharp(file);
+      if (lossless) {
+        pipeline = pipeline.webp({ lossless: true, effort: 6 });
+      } else {
+        pipeline = pipeline.webp({ quality, effort: 6 });
+      }
+      await pipeline.toFile(targetPath);
       console.log('converted:', path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
+    } else if (ext === '.webp') {
+      // Rename or copy existing WebP
+      if (file !== targetPath) {
+        await fs.copyFile(file, targetPath);
+        console.log('processed:', path.relative(srcDir, file), '->', path.relative(inPlace ? path.dirname(file) : outDir, targetPath));
+        if (inPlace) {
+          await fs.unlink(file);
+        }
+      } else {
+        console.log('skipped (already in place):', path.relative(srcDir, file));
+      }
     }
 
-    if (inPlace) {
-      // 변환 성공 시 원본 삭제
+    if (inPlace && ext === '.png') {
+      // Remove original PNG after conversion
       await fs.unlink(file);
       console.log('removed original png:', path.relative(srcDir, file));
     }
@@ -160,26 +142,24 @@ async function main() {
     process.exit(1);
   }
 
-  const pngs = await collectPNGs(srcDir);
-  if (pngs.length === 0) {
-    console.log('변환할 PNG 파일이 없습니다:', srcDir);
+  const images = await collectImages(srcDir);
+  if (images.length === 0) {
+    console.log('처리할 이미지 파일이 없습니다:', srcDir);
     return;
   }
 
-  // 번호 매기기 모드일 때 파일들을 정렬 (일관된 순서 보장)
-  if (numberFiles) {
-    pngs.sort();
-  }
+  // Sort images to ensure consistent order
+  images.sort();
 
-  // 병렬 처리 제한
-  for (let i = 0; i < pngs.length; i += concurrency) {
-    const batch = pngs.slice(i, i + concurrency);
+  // Process files in batches
+  for (let i = 0; i < images.length; i += concurrency) {
+    const batch = images.slice(i, i + concurrency);
     await Promise.all(batch.map((file, batchIndex) => processFile(file, i + batchIndex)));
   }
 
-  console.log('완료. 총 PNG:', pngs.length);
+  console.log('완료. 총 이미지:', images.length);
   if (numberFiles) {
-    console.log(`번호 매기기: ${startNumber}부터 ${startNumber + pngs.length - 1}까지`);
+    console.log(`번호 매기기: ${startNumber}부터 ${startNumber + images.length - 1}까지`);
   }
 }
 
