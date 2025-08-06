@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     let allGalleryData = [];
     let currentMemeIndex = 0;
-    const memesPerLoad = 3;
+    const memesPerLoad = 1;
 
     // Fetch gallery data
     fetch('gallery.json')
@@ -35,12 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
         currentMemeIndex += memesPerLoad;
     }
 
-    // Setup infinite scroll
     function setupInfiniteScroll() {
-        const memeSection = document.querySelector('.meme-section');
         const options = {
             root: null,
-            rootMargin: '0px',
+            rootMargin: '0px 0px 200px 0px', // Load more content when within 200px of the bottom
             threshold: 0.1
         };
 
@@ -48,11 +46,30 @@ document.addEventListener('DOMContentLoaded', function () {
             entries.forEach(entry => {
                 if (entry.isIntersecting && currentMemeIndex < allGalleryData.length) {
                     renderMemeGrid();
+
+                    // If we've loaded all images, disconnect the observer
+                    if (currentMemeIndex >= allGalleryData.length) {
+                        observer.disconnect();
+                    }
                 }
             });
         }, options);
 
-        observer.observe(memeSection);
+        // Observe the last meme card
+        function observeLastMeme() {
+            const memeCards = document.querySelectorAll('.meme-card');
+            if (memeCards.length > 0) {
+                observer.observe(memeCards[memeCards.length - 1]);
+            }
+        }
+
+        // Initial observation
+        observeLastMeme();
+
+        // Re-observe after each render
+        const memeGrid = document.getElementById('meme-grid');
+        const mutationObserver = new MutationObserver(observeLastMeme);
+        mutationObserver.observe(memeGrid, { childList: true });
     }
 
     // Setup chaos zone
