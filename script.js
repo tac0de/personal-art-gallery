@@ -3,6 +3,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentMemeIndex = 0;
     const memesPerLoad = 1;
 
+    const copyright =  document.querySelector('.copyright');
+
+    copyright.textContent = `© ${new Date().getFullYear()} Abyssal Gallery. All rights reserved. Enter at your own risk.`;
+
     // Fetch gallery data
     fetch('gallery.json')
         .then(response => response.json())
